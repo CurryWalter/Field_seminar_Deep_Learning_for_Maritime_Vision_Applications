@@ -1,6 +1,7 @@
 import torch
 import torchvision.models as models
 import torch.nn as nn
+
 def get_ResNet50(num_classes):
     """
 
