@@ -2,10 +2,10 @@ import os
 import shutil
 
 import pandas as pd
-from create_lookup_table import create_lookup_table
 from sklearn.model_selection import train_test_split
 
-def create_train_test_val_splits(df=create_lookup_table(), train_ratio=4/7, validation_ratio=1/7, test_ratio=2/7):
+
+def create_train_test_val_splits(df, train_ratio=4/7, validation_ratio=1/7, test_ratio=2/7):
     x_train, x_test, y_train, y_test = train_test_split(df.loc[:, 'relative_path'], df.loc[:, 'label'],
                                                         test_size=1 - train_ratio,
                                                         stratify=df.loc[:, 'label'], random_state=0)
@@ -47,5 +47,6 @@ def write_data_to_dir(df_train, df_test, df_val):
         shutil.copy(path, '../splits/baseline/validation/')
 
 if __name__ == "__main__":
-    tr, te, val = create_train_test_val_splits()
+    df = pd.read_csv('../data/fish_lookup_table.csv')
+    tr, te, val = create_train_test_val_splits(df)
     write_data_to_dir(tr, te, val)
