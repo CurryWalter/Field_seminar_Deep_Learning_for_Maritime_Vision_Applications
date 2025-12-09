@@ -40,10 +40,10 @@ def main():
         for i in range(train_config.base_epochs):
             print(f"Epoch {i+1}/{train_config.base_epochs}")
 
-            loss = train_one_epoch(model, train_config.loss_fn, train_config.optimizer, train_dataloader, device)
-            mlflow.log_metric('train_loss', loss, step=i)
+            # loss = train_one_epoch(model, train_config.loss_fn, train_config.optimizer, train_dataloader, device)
+            # mlflow.log_metric('train_loss', loss, step=i)
 
-            accuracy, val_loss = validate(model, val_dataloader, device)
+            accuracy, val_loss = validate(model, train_config.loss_fn, val_dataloader, device)
             mlflow.log_metrics({'val_accuracy': accuracy, 'val_loss': val_loss}, step=i)
 
 
