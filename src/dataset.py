@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 from torch.utils.data import Dataset
+from src.helper_functions import match_name_to_label
 from PIL import Image
 
 
@@ -17,10 +18,10 @@ class FishyDataset(Dataset):
         return len(os.listdir(self.img_dir))
 
     def __getitem__(self, idx):
-        img_name = self.annotations['image_name'][idx]
+        img_name = os.listdir(self.img_dir)[idx]
         img_path = os.path.join(self.img_dir, img_name)
-        img = Image.open(os.path.join(self.img_dir, img_path))
-        label = self.annotations['class'][idx]
+        img = Image.open(img_path)
+        label = int(match_name_to_label(img_name)[-2:])
         if self.transforms:
             img = self.transforms(img)
 

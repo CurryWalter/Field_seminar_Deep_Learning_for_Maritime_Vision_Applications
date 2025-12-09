@@ -1,6 +1,8 @@
 import torch
 import torchvision.models as models
 import torch.nn as nn
+from torchvision.models import ResNet50_Weights
+
 
 def get_ResNet50(num_classes):
     """
@@ -10,7 +12,7 @@ def get_ResNet50(num_classes):
     """
 
     # get pretrained model
-    model = models.resnet50(weights="pretrained")
+    model = models.resnet50(weights=ResNet50_Weights.IMAGENET1K_V2)
 
     # freeze base model layers for initial training
     for param in model.parameters():

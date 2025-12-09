@@ -21,8 +21,8 @@ def create_train_test_val_splits_traj_overlap(
 
         dataframe_length = len(df_label)
         train_target_size = train_ratio * dataframe_length
-        val_target_size   = validation_ratio * dataframe_length
-        test_target_size  = test_ratio * dataframe_length
+        val_target_size = validation_ratio * dataframe_length
+        test_target_size = test_ratio * dataframe_length
 
         trajectories = list(df_label['trajectory'].unique())
         random.seed(0)

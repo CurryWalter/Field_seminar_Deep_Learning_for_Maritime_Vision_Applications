@@ -1,8 +1,8 @@
 import pandas as pd
 
-from src.create_lookup_table import create_lookup_table
-from src.create_splits_baseline import write_data_to_dir, create_train_test_val_splits
-from src.create_splits_no_traj_overlap import create_train_test_val_splits_traj_overlap, write_data_to_dir_traj_overlap
+from preprocessing.create_lookup_table import create_lookup_table
+from preprocessing.create_splits_baseline import write_data_to_dir, create_train_test_val_splits
+from preprocessing.create_splits_no_traj_overlap import create_train_test_val_splits_traj_overlap, write_data_to_dir_traj_overlap
 
 if __name__ == "__main__":
     create_lookup_table().to_csv('../data/fish_lookup_table.csv')

@@ -1,4 +1,4 @@
-from create_lookup_table import create_lookup_table
+from preprocessing.create_lookup_table import create_lookup_table
 def match_name_to_label(image_name):
     # input: image name output: label
     df = create_lookup_table()
