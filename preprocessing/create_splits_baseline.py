@@ -17,7 +17,14 @@ def create_train_test_val_splits(df, train_ratio=4/7, validation_ratio=1/7, test
     df_train = pd.concat([x_train, y_train], axis=1)
     df_val = pd.concat([x_val, y_val], axis=1)
     df_test = pd.concat([x_test, y_test], axis=1)
-    return df_train, df_test, df_val
+
+    df_new = pd.DataFrame()
+    df_new.index = df.index
+    df_new.loc[df_train.index, 'base_split'] = 'train'
+    df_new.loc[df_test.index, 'base_split'] = 'test'
+    df_new.loc[df_val.index, 'base_split'] = 'validation'
+
+    return df_train, df_test, df_val, df_new
 
 def write_data_to_dir(df_train, df_test, df_val):
     if not os.path.exists('../splits/'):
@@ -46,7 +53,3 @@ def write_data_to_dir(df_train, df_test, df_val):
         path = row['relative_path']
         shutil.copy(path, '../splits/baseline/validation/')
 
-if __name__ == "__main__":
-    df = pd.read_csv('../data/fish_lookup_table.csv')
-    tr, te, val = create_train_test_val_splits(df)
-    write_data_to_dir(tr, te, val)

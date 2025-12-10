@@ -65,7 +65,16 @@ def create_train_test_val_splits_traj_overlap(
         test.append(pd.concat(test_temp))
         val.append(pd.concat(val_temp))
 
-    return pd.concat(train), pd.concat(test), pd.concat(val)
+    df_train = pd.concat(train)
+    df_test = pd.concat(test)
+    df_val = pd.concat(val)
+    df_new = pd.DataFrame()
+    df_new.index = df.index
+    df_new.loc[df_train.index, 'traj_split'] = 'train'
+    df_new.loc[df_test.index, 'traj_split'] = 'test'
+    df_new.loc[df_val.index, 'traj_split'] = 'validation'
+
+    return df_train, df_test, df_val, df_new
 
 def write_data_to_dir_traj_overlap(df_train, df_test, df_val):
     if not os.path.exists('../splits/'):
