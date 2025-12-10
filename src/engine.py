@@ -1,4 +1,5 @@
 import torch
+from sklearn.metrics import balanced_accuracy_score
 
 
 def train_one_epoch(model, loss_fn, optimizer, dataloader, device):
@@ -18,19 +19,16 @@ def train_one_epoch(model, loss_fn, optimizer, dataloader, device):
 
     for imgs, labels in dataloader:
         # bring image to gpu if available
-        imgs.to(device)
-        labels.to(device)
+        imgs = imgs.to(device)
+        labels = labels.to(device)
 
         outputs = model(imgs)
-        print(outputs)
-
         optimizer.zero_grad()
 
         # compute loss and do backward propagation
         loss = loss_fn(outputs, labels)
         loss.backward()
 
-        print(loss.item())
         # adjust model weights
         optimizer.step()
 
@@ -41,7 +39,7 @@ def train_one_epoch(model, loss_fn, optimizer, dataloader, device):
 
 
 
-def validate(model, dataloader, device):
+def validate(model, loss_fn, dataloader, device):
     """
     Validate a pytorch model for one epoch
     :param model: pytorch model
@@ -53,13 +51,31 @@ def validate(model, dataloader, device):
     # set model mode to eval
     model.eval()
 
+    cum_acc = 0
+    cum_loss = 0
     for imgs, labels in dataloader:
-        # images to gpu if available
-        imgs.to(device)
 
-        # disabling calculating gradients for inference
+        # put images, labels to gpu if available
+        imgs = imgs.to(device)
+        labels = labels.to(device)
+
+        # disabling calculate gradients for inference
         with torch.no_grad():
             outputs = model(imgs)
 
+        loss = loss_fn(outputs, labels)
+
         # convert outputs back to cpu
         outputs = outputs.detach().cpu().numpy()
+        labels = labels.cpu().numpy()
+
+        # calculate accuracy
+        accuracy = balanced_accuracy_score(labels, outputs)
+
+        cum_loss += loss.item()
+        cum_acc += accuracy
+
+    mean_loss = cum_loss / len(dataloader)
+    mean_acc = cum_acc / len(dataloader)
+
+    return mean_acc, mean_loss
