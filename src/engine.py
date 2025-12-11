@@ -1,3 +1,4 @@
+import numpy as np
 import torch
 from sklearn.metrics import balanced_accuracy_score
 
@@ -68,6 +69,10 @@ def validate(model, loss_fn, dataloader, device):
         # convert outputs back to cpu
         outputs = outputs.detach().cpu().numpy()
         labels = labels.cpu().numpy()
+
+        outputs = np.argmax(outputs, axis=1)
+
+        print(outputs, labels)
 
         # calculate accuracy
         accuracy = balanced_accuracy_score(labels, outputs)

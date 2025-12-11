@@ -21,7 +21,7 @@ class FishyDataset(Dataset):
         img_name = os.listdir(self.img_dir)[idx]
         img_path = os.path.join(self.img_dir, img_name)
         img = Image.open(img_path)
-        label = int(match_name_to_label(img_name)[-2:])
+        label = int(match_name_to_label(img_name)[-2:]) - 1
         if self.transforms:
             img = self.transforms(img)
 
