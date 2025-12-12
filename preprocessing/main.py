@@ -1,3 +1,4 @@
+import os
 import pandas as pd
 
 from preprocessing.create_lookup_table import create_lookup_table
@@ -5,8 +6,8 @@ from preprocessing.create_splits_baseline import write_data_to_dir, create_train
 from preprocessing.create_splits_no_traj_overlap import create_train_test_val_splits_traj_overlap, write_data_to_dir_traj_overlap
 
 
-def main():
-    df = create_lookup_table()
+def main(path):
+    df = create_lookup_table(path)
 
 
     tr, te, val, new = create_train_test_val_splits(df)
@@ -17,7 +18,7 @@ def main():
     write_data_to_dir_traj_overlap(tr, te, val)
     df.loc[:,'traj_split'] = new.loc[:, 'traj_split']
 
-    df.to_csv('../data/lookup_table.csv')
+    df.to_csv(os.path.join(path, 'lookup_table.csv'))
 
 
 if __name__ == "__main__":
