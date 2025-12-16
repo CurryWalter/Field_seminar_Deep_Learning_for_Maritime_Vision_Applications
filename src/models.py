@@ -25,4 +25,6 @@ def get_ResNet50(num_classes):
 
     return model
 
-
+def unfreeze_layers(model):
+    for param in model.parameters():
+        param.requires_grad = True

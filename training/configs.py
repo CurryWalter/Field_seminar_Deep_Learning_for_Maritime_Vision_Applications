@@ -17,6 +17,7 @@ class BasicTransforms:
 
 class ResNetTrainingConfig:
     def __init__(self, model_parameters, lr=1e-3, weight_decay=1e-2, loss_fn=CrossEntropyLoss(), batch_size=16, base_epochs=10, ft_epochs=10, image_size=(100, 100), transforms=BasicTransforms, run_name=None):
+        self.model_parameters = model_parameters
         self.lr = lr,
         self.weight_decay = weight_decay
         self.loss_fn = loss_fn
@@ -44,3 +45,7 @@ class ResNetTrainingConfig:
     def get_save_path(self, path_to_models_dir):
         path = os.path.join(path_to_models_dir, f"ResNet50_{self.run_name}")
         return path
+
+    def update_lr(self, new_lr):
+        self.lr = new_lr
+        self.optimizer = AdamW(params=self.model_parameters, lr=self.lr, weight_decay=self.weight_decay)

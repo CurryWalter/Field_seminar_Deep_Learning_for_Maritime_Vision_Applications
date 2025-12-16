@@ -44,8 +44,15 @@ def main():
         # for validation
         best_accuracy = 0
 
-        for i in range(train_config.base_epochs):
+        for i in range(train_config.base_epochs + train_config.ft_epochs):
             print(f"Epoch {i+1}/{train_config.base_epochs}")
+
+            # unfreeze top layers during fine tuning
+            if i == train_config.base_epochs:
+                for params in model.layer4.parameters():
+                    params.requires_grad = True
+                train_config.update_lr(train_config.lr / 10)
+
 
             loss = train_one_epoch(model, train_config.loss_fn, train_config.optimizer, train_dataloader, device)
             mlflow.log_metric('train_loss', loss, step=i)
@@ -57,6 +64,7 @@ def main():
 
             if best_accuracy < accuracy:
                 torch.save(model.state_dict(), train_config.get_save_path(model_path))
+
 
 
 
