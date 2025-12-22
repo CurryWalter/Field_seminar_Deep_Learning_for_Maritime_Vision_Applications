@@ -17,6 +17,12 @@ def create_train_test_val_splits(df, train_ratio=4/7, validation_ratio=1/7, test
     df_train = pd.concat([x_train, y_train], axis=1)
     df_val = pd.concat([x_val, y_val], axis=1)
     df_test = pd.concat([x_test, y_test], axis=1)
+
+
+
+    df_train.to_csv('../splits/baseline/train.csv')
+    df_test.to_csv('../splits/baseline/test.csv')
+    df_val.to_csv('../splits/baseline/val.csv')
     return df_train, df_test, df_val
 
 def write_data_to_dir(df_train, df_test, df_val):

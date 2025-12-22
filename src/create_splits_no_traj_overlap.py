@@ -64,7 +64,13 @@ def create_train_test_val_splits_traj_overlap(
         train.append(pd.concat(train_temp))
         test.append(pd.concat(test_temp))
         val.append(pd.concat(val_temp))
+        df_train = pd.concat(train)
+        df_test = pd.concat(test)
+        df_val = pd.concat(val)
 
+        df_train.to_csv('../splits/baseline/train.csv')
+        df_test.to_csv('../splits/baseline/test.csv')
+        df_val.to_csv('../splits/baseline/val.csv')
     return pd.concat(train), pd.concat(test), pd.concat(val)
 
 def write_data_to_dir_traj_overlap(df_train, df_test, df_val):
@@ -96,5 +102,5 @@ def write_data_to_dir_traj_overlap(df_train, df_test, df_val):
 
 if __name__ == "__main__":
     df = pd.read_csv('../data/fish_lookup_table.csv')
-    tr, te, val = create_train_test_val_splits_traj_overlap()
+    tr, te, val = create_train_test_val_splits_traj_overlap(df)
     write_data_to_dir_traj_overlap(tr, te, val)
