@@ -1,8 +1,10 @@
 import numpy as np
 import torch
+import warnings
 from tqdm import tqdm
 from sklearn.metrics import balanced_accuracy_score
 
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 def train_one_epoch(model, loss_fn, optimizer, dataloader, device):
     """
@@ -73,7 +75,6 @@ def validate(model, loss_fn, dataloader, device):
 
         outputs = np.argmax(outputs, axis=1)
 
-        print(outputs, labels)
 
         # calculate accuracy
         accuracy = balanced_accuracy_score(labels, outputs)

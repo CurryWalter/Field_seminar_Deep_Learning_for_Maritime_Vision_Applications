@@ -9,19 +9,23 @@ class FishyDataset(Dataset):
     """
     Custom Pytorch Dataset class for load images from Fish4Knowledge Dataset
     """
-    def __init__(self, img_dir, annotation_file, transforms):
+    def __init__(self, annotation_file, transforms, img_dir=None):
         self.img_dir = img_dir
         self.annotations = pd.read_csv(annotation_file)
         self.transforms = transforms
 
     def __len__(self):
-        return len(os.listdir(self.img_dir))
+        return len(self.annotations['image_name'].tolist())
 
     def __getitem__(self, idx):
-        img_name = os.listdir(self.img_dir)[idx]
-        img_path = os.path.join(self.img_dir, img_name)
+        if self.img_dir is None:
+            img_path = self.annotations['relative_path'][idx]
+        else:
+            img_name = self.annotations['image_name'][idx]
+            img_path = os.path.join(self.img_dir, img_name)
         img = Image.open(img_path)
-        label = int(match_name_to_label(img_name)[-2:]) - 1
+        label = int(self.annotations['label'][idx][-2:]) - 1
+
         if self.transforms:
             img = self.transforms(img)
 
