@@ -5,18 +5,20 @@ from torch.optim import AdamW
 from torchvision.transforms import v2
 
 
-class BasicTransforms:
-    def __init__(self, image_size=(100, 100)):
-        self.transforms = v2.Compose([
-            v2.ToImage(),
-            v2.ToDtype(torch.float32, scale=True),
-            v2.Resize(image_size),
-            v2.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-        ])
+
+def base_transforms(image_size=(100, 100)):
+    transforms = v2.Compose([
+        v2.ToImage(),
+        v2.ToDtype(torch.float32, scale=True),
+        v2.Resize(image_size),
+        v2.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+    return transforms
 
 
-class ResNetTrainingConfig:
-    def __init__(self, model_parameters, lr=1e-3, weight_decay=1e-2, loss_fn=CrossEntropyLoss(), batch_size=16, base_epochs=10, ft_epochs=10, image_size=(100, 100), transforms=BasicTransforms, run_name=None):
+class BaseTrainingConfig:
+    def __init__(self, model_type, model_parameters, lr=1e-3, weight_decay=1e-2, loss_fn=CrossEntropyLoss(), batch_size=16, base_epochs=10, ft_epochs=10, image_size=(100, 100), transforms=base_transforms, run_name=None):
+        self.model_type = model_type
         self.model_parameters = model_parameters
         self.lr = lr
         self.weight_decay = weight_decay
@@ -26,8 +28,9 @@ class ResNetTrainingConfig:
         self.base_epochs = base_epochs
         self.ft_epochs = ft_epochs
         self.image_size = image_size
-        self.transforms = transforms(self.image_size).transforms
+        self.transforms = transforms(self.image_size)
         self.run_name = run_name
+
 
     def get_train_params(self):
         return {
@@ -43,7 +46,10 @@ class ResNetTrainingConfig:
         }
 
     def get_save_path(self, path_to_models_dir):
-        path = os.path.join(path_to_models_dir, f"ResNet50_{self.run_name}")
+        if self.model_type.lower() == 'resnet':
+            path = os.path.join(path_to_models_dir, f"ResNet50_{self.run_name}")
+        else:
+            path = os.path.join(path_to_models_dir, f"ViTb16_{self.run_name}")
         return path
 
     def update_lr(self, new_lr, model_parameters):

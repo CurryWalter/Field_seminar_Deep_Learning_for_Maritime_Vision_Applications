@@ -1,17 +1,18 @@
 import torch
 import mlflow
 from torch.utils.data import DataLoader
+from torchvision import models
 from src.engine import train_one_epoch, validate
 from src.dataset import FishyDataset
-from src.models import get_ResNet50
-from configs import ResNetTrainingConfig
+from src.models import get_ResNet50, get_ViTb16, unfreeze_layers
+from configs import BaseTrainingConfig
 
-def main():
-    # get model
-    model = get_ResNet50(23)
+def main(model, image_size):
+
+    model_type = 'resnet' if isinstance(model, models.ResNet) else 'vit'
 
     # get train config
-    train_config = ResNetTrainingConfig(model.parameters(), run_name='first_run_baseline_dataset')
+    train_config = BaseTrainingConfig(model_type, model.parameters(), run_name='first_run_baseline_dataset', image_size=image_size)
 
     # use gpu if available
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -23,7 +24,10 @@ def main():
     val_file = "../splits/baseline/val.csv"
 
     # path for model save
-    model_path = "../models/ResNet50/"
+    if isinstance(model, models.ResNet):
+        model_path = "../models/ResNet50/"
+    else:
+        model_path = "../models/ViTb16/"
 
 
     train_dataset = FishyDataset(train_file, train_config.transforms)
@@ -49,8 +53,7 @@ def main():
 
             # unfreeze top layers during fine tuning
             if i == train_config.base_epochs:
-                for params in model.layer4.parameters():
-                    params.requires_grad = True
+                unfreeze_layers(model)
                 train_config.update_lr(train_config.lr / 10, model.parameters())
 
 
@@ -70,4 +73,13 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    image_size = (224, 224)
+    num_classes = 23
+
+    # for Resnet
+    # model = get_ResNet50(num_classes)
+
+    # for ViT
+    model = get_ViTb16(num_classes, image_size[0])
+
+    main(model, image_size)

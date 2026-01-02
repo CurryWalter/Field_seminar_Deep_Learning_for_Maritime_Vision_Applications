@@ -2,9 +2,11 @@ import numpy as np
 import torch
 import warnings
 from tqdm import tqdm
-from sklearn.metrics import balanced_accuracy_score
+from sklearn.metrics import accuracy_score
 
 warnings.filterwarnings("ignore", category=FutureWarning)
+
+
 
 def train_one_epoch(model, loss_fn, optimizer, dataloader, device):
     """
@@ -77,7 +79,7 @@ def validate(model, loss_fn, dataloader, device):
 
 
         # calculate accuracy
-        accuracy = balanced_accuracy_score(labels, outputs)
+        accuracy = accuracy_score(labels, outputs)
 
         cum_loss += loss.item()
         cum_acc += accuracy
@@ -86,3 +88,4 @@ def validate(model, loss_fn, dataloader, device):
     mean_acc = cum_acc / len(dataloader)
 
     return mean_acc, mean_loss
+
