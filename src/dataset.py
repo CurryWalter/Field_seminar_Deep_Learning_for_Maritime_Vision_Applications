@@ -1,7 +1,6 @@
 import os
 import pandas as pd
 from torch.utils.data import Dataset
-from src.helper_functions import match_name_to_label
 from PIL import Image
 
 
@@ -10,6 +9,11 @@ class FishyDataset(Dataset):
     Custom Pytorch Dataset class for load images from Fish4Knowledge Dataset
     """
     def __init__(self, annotation_file, transforms, img_dir=None):
+        """
+        :param annotation_file: Path to the annotation file
+        :param transforms: Pytorch transforms
+        :param img_dir: Path to the images directory
+        """
         self.img_dir = img_dir
         self.annotations = pd.read_csv(annotation_file)
         self.transforms = transforms
