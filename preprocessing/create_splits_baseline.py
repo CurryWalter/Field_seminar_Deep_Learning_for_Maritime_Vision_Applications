@@ -18,6 +18,19 @@ def create_train_test_val_splits(df, train_ratio=4/7, validation_ratio=1/7, test
     df_val = pd.concat([x_val, y_val], axis=1)
     df_test = pd.concat([x_test, y_test], axis=1)
 
+    if not os.path.exists('../splits/'):
+        os.makedirs('../splits/')
+
+    if not os.path.exists('../splits/baseline/'):
+        os.makedirs('../splits/baseline/')
+
+    if not os.path.exists('../splits/baseline/train/'):
+        os.makedirs('../splits/baseline/train/')
+
+    if not os.path.exists('../splits/baseline/validation/'):
+        os.makedirs('../splits/baseline/validation/')
+    if not os.path.exists('../splits/baseline/test/'):
+        os.makedirs('../splits/baseline/test/')
 
     df_train.to_csv('../splits/baseline/train.csv')
     df_test.to_csv('../splits/baseline/test.csv')
@@ -32,19 +45,6 @@ def create_train_test_val_splits(df, train_ratio=4/7, validation_ratio=1/7, test
     return df_train, df_test, df_val, df_new
 
 def write_data_to_dir(df_train, df_test, df_val):
-    if not os.path.exists('../splits/'):
-        os.makedirs('../splits/')
-
-    if not os.path.exists('../splits/baseline/'):
-        os.makedirs('../splits/baseline/')
-
-    if not os.path.exists('../splits/baseline/train/'):
-        os.makedirs('../splits/baseline/train/')
-
-    if not os.path.exists('../splits/baseline/validation/'):
-        os.makedirs('../splits/baseline/validation/')
-    if not os.path.exists('../splits/baseline/test/'):
-        os.makedirs('../splits/baseline/test/')
 
     for i, row in df_train.iterrows():
         path = row['relative_path']

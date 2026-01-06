@@ -65,6 +65,19 @@ def create_train_test_val_splits_traj_overlap(
         test.append(pd.concat(test_temp))
         val.append(pd.concat(val_temp))
 
+    if not os.path.exists('../splits/'):
+        os.makedirs('../splits/')
+
+    if not os.path.exists('../splits/trajectory/'):
+        os.makedirs('../splits/trajectory/')
+
+    if not os.path.exists('../splits/trajectory/train/'):
+        os.makedirs('../splits/trajectory/train/')
+
+    if not os.path.exists('../splits/trajectory/validation/'):
+        os.makedirs('../splits/trajectory/validation/')
+    if not os.path.exists('../splits/trajectory/test/'):
+        os.makedirs('../splits/trajectory/test/')
 
     df_train = pd.concat(train)
     df_test = pd.concat(test)
@@ -83,19 +96,7 @@ def create_train_test_val_splits_traj_overlap(
     return df_train, df_test, df_val, df_new
 
 def write_data_to_dir_traj_overlap(df_train, df_test, df_val):
-    if not os.path.exists('../splits/'):
-        os.makedirs('../splits/')
 
-    if not os.path.exists('../splits/trajectory/'):
-        os.makedirs('../splits/trajectory/')
-
-    if not os.path.exists('../splits/trajectory/train/'):
-        os.makedirs('../splits/trajectory/train/')
-
-    if not os.path.exists('../splits/trajectory/validation/'):
-        os.makedirs('../splits/trajectory/validation/')
-    if not os.path.exists('../splits/trajectory/test/'):
-        os.makedirs('../splits/trajectory/test/')
 
     for i, row in df_train.iterrows():
         path = row['relative_path']
