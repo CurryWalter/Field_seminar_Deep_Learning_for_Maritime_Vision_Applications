@@ -18,7 +18,7 @@ def main():
     write_data_to_dir_traj_overlap(tr, te, val)
     df.loc[:,'traj_split'] = new.loc[:, 'traj_split']
 
-    df.to_csv('lookup_table.csv')
+    df.to_csv('../data/lookup_table.csv')
 
 
 if __name__ == "__main__":

@@ -30,4 +30,4 @@ def create_lookup_table(path_to_fish_image='../data/fish_image'):
     return df
 
 if __name__ == '__main__':
-    create_lookup_table().to_csv('../data/fish_lookup_table.csv')
+    create_lookup_table().to_csv('../data/lookup_table.csv')
