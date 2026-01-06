@@ -60,5 +60,5 @@ def write_data_to_dir(df_train, df_test, df_val):
 
 if __name__ == "__main__":
     df = pd.read_csv('../data/fish_lookup_table.csv')
-    tr, te, val = create_train_test_val_splits(df)
+    tr, te, val, new = create_train_test_val_splits(df)
     write_data_to_dir(tr, te, val)
