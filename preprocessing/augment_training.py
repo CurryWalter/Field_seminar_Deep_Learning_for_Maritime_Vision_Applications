@@ -26,7 +26,16 @@ def augment_class(class_name, n_samples):
         new_path = os.path.join('../splits/baseline/train/', new_name)
 
         augmented_image.save(new_path)
+        augmented_annotations = pd.DataFrame({
+            'relative_path': [new_path],
+            'label': [class_name]
+        })
+
+        annotations = pd.concat([annotations, augmented_annotations])
         augmented_images.append(new_path)
+
+    annotations.to_csv('../splits/baseline/train.csv', index=False)
+
     return augmented_images
 
 augmented_images = augment_class('fish_01', 3)

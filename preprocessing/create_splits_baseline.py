@@ -14,9 +14,12 @@ def create_train_test_val_splits(df, train_ratio=4/7, validation_ratio=1/7, test
                                                     stratify=y_test.loc[:], random_state=0)
 
 
-    df_train = pd.concat([x_train, y_train], axis=1)
-    df_val = pd.concat([x_val, y_val], axis=1)
-    df_test = pd.concat([x_test, y_test], axis=1)
+    df_train = pd.concat([x_train, y_train], axis=1,ignore_index=True)
+    df_train.columns = ['relative_path', 'label']
+    df_val = pd.concat([x_val, y_val], axis=1,ignore_index=True)
+    df_val.columns = ['relative_path', 'label']
+    df_test = pd.concat([x_test, y_test], axis=1,ignore_index=True)
+    df_test.columns = ['relative_path', 'label']
 
     if not os.path.exists('../splits/'):
         os.makedirs('../splits/')
@@ -59,6 +62,6 @@ def write_data_to_dir(df_train, df_test, df_val):
         shutil.copy(path, '../splits/baseline/validation/')
 
 if __name__ == "__main__":
-    df = pd.read_csv('../data/fish_lookup_table.csv')
+    df = pd.read_csv('../data/lookup_table.csv')
     tr, te, val, new = create_train_test_val_splits(df)
     write_data_to_dir(tr, te, val)
