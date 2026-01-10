@@ -28,7 +28,3 @@ def apply_aug():
             augment_class(cls, difference, 'downsampled_with_aug')
             # this line below is necessary bcs .sample is weird imo
             count = pd.read_csv('../splits/downsampled_with_aug/train.csv')['label'].value_counts().loc[cls]
-
-
-copy_and_rename_downsampled()
-apply_aug()

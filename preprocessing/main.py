@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 
+from preprocessing.create_downsample_with_aug import *
 from preprocessing.create_lookup_table import create_lookup_table
 from preprocessing.create_splits_baseline import write_data_to_dir, create_train_test_val_splits
 from preprocessing.create_splits_no_traj_overlap import create_train_test_val_splits_traj_overlap, write_data_to_dir_traj_overlap
@@ -23,6 +24,8 @@ def main():
     copy_and_rename_trajectory()
     create_downsampled_dir(downsampled_data)
 
+    copy_and_rename_downsampled()
+    apply_aug()
     df.to_csv('../data/lookup_table.csv')
 
 
